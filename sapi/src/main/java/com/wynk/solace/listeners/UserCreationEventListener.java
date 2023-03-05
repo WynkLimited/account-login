@@ -1,6 +1,5 @@
 package com.wynk.solace.listeners;
 
-import com.wynk.common.UserType;
 import com.wynk.solace.CircleSolaceMapping;
 import com.wynk.solace.SolaceQueueMessageProducer;
 import com.wynk.solace.dto.SolaceUserData;
@@ -9,10 +8,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import scala.util.parsing.combinator.testing.Str;
-
-import java.sql.Time;
-import java.util.Date;
 
 @Service
 public class UserCreationEventListener extends AbstractMusicEventListener<UserCreationEvent> {

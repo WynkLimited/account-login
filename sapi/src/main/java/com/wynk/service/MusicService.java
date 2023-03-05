@@ -30,8 +30,8 @@ import com.wynk.wcf.WCFApisUtils;
 import com.wynk.wcf.dto.FeatureType;
 import com.wynk.wcf.dto.UserSubscription;
 import io.netty.handler.codec.http.HttpRequest;
-import kafka.javaapi.producer.Producer;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.kafka.clients.producer.KafkaProducer;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
@@ -92,7 +92,7 @@ public class MusicService extends BaseService {
     @Autowired private AccountRegistrationService accountRegistrationService;
     @Autowired private SubscriptionIntentService subscriptionIntentService;
     @Autowired protected S3StorageService s3ServiceManager;
-    @Autowired protected Producer kafkaProducerManager;
+    @Autowired protected KafkaProducer kafkaProducerManager;
     @Autowired private UserRecentSongDAO userSongDAO;
     @Autowired private UserSongService userSongService;
 

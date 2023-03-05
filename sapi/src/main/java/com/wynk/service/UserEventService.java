@@ -1,17 +1,14 @@
 package com.wynk.service;
 
 import com.wynk.adtech.AdUtils;
-import com.wynk.common.MusicSubscriptionType;
 import com.wynk.common.UserEventType;
 import com.wynk.config.MusicConfig;
 import com.wynk.constants.JsonKeyNames;
 import com.wynk.constants.MusicConstants;
-import com.wynk.constants.MusicSubscriptionPackConstants;
 import com.wynk.dto.ThirdPartyNotifyDTO;
-import com.wynk.music.WCFServiceType;
+import com.wynk.server.ChannelContext;
 import com.wynk.user.dto.UserActivityEvent;
 import com.wynk.user.dto.UserDevice;
-import com.wynk.server.ChannelContext;
 import com.wynk.utils.EncryptUtils;
 import com.wynk.utils.MusicUtils;
 import com.wynk.utils.Utils;
@@ -19,11 +16,9 @@ import com.wynk.wcf.WCFApisUtils;
 import com.wynk.wcf.dto.FeatureType;
 import com.wynk.wcf.dto.UserSubscription;
 import com.wynk.wcf.dto.UserSubscription.ProductMeta;
-import java.util.LinkedList;
-import java.util.List;
-import kafka.javaapi.producer.Producer;
-import kafka.producer.KeyedMessage;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.kafka.clients.producer.KafkaProducer;
+import org.apache.kafka.clients.producer.Producer;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
@@ -32,7 +27,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
-import java.util.concurrent.*;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.RejectedExecutionException;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class UserEventService {
@@ -54,7 +56,7 @@ public class UserEventService {
     private MusicConfig config;
     
     @Autowired
-    private Producer kafkaProducerManager;
+    private KafkaProducer kafkaProducerManager;
 
     @Autowired
     private WCFApisUtils wcfApisUtils;

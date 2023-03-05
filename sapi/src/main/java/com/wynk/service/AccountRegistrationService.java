@@ -53,10 +53,9 @@ import com.wynk.wcf.dto.MsisdnIdentificationResponse;
 import com.wynk.wcf.dto.UserMobilityInfo;
 import com.wynk.wcf.dto.UserSubscription;
 import io.netty.handler.codec.http.HttpRequest;
-import kafka.javaapi.producer.Producer;
-import kafka.producer.KeyedMessage;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.kafka.clients.producer.KafkaProducer;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
@@ -141,7 +140,7 @@ public class AccountRegistrationService {
     private MobileConnectService mobileConnectService;
 
     @Autowired
-    private Producer kafkaProducerManager;
+    private KafkaProducer kafkaProducerManager;
 
     @Autowired private GeoDBService geoDBService;
 

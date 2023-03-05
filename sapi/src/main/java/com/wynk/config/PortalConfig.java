@@ -1,10 +1,13 @@
 package com.wynk.config;
 
-import com.wynk.db.*;
+import com.wynk.db.MongoDBManager;
+import com.wynk.db.S3StorageService;
+import com.wynk.db.ShardedRedisServiceManager;
 import com.wynk.utils.ConfigFile;
 import com.wynk.utils.ObjectUtils;
-import kafka.javaapi.producer.Producer;
-import kafka.producer.ProducerConfig;
+import org.apache.kafka.clients.producer.KafkaProducer;
+import org.apache.kafka.clients.producer.Producer;
+import org.apache.kafka.clients.producer.ProducerConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,7 +19,10 @@ import redis.clients.jedis.JedisPoolConfig;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Properties;
+import java.util.Set;
 import java.util.logging.Logger;
 
 
@@ -75,7 +81,7 @@ public class PortalConfig {
         return config;
     }
 
-    ProducerConfig kafkaProducerConfig()
+    Properties kafkaProducerConfig()
     {
         boolean producerEnabled = properties.getBooleanProperty("kafka.producer", false);
         if(producerEnabled) {
@@ -87,8 +93,8 @@ public class PortalConfig {
             // Blocking in the user-supplied serializers or partitioner will not be counted against this timeout
             props.put("max.block.ms", "5000");
             props.put("request.timeout.ms", "5000");
-            ProducerConfig config = new ProducerConfig(props);
-            return config;
+            //ProducerConfig config = new ProducerConfig(props);
+            return props;
         }
         else
             return null;
@@ -457,10 +463,10 @@ public class PortalConfig {
     }
 
     @Bean
-    public Producer<String, String> kafkaProducerManager() {
-        ProducerConfig kafkaProducerConfig = kafkaProducerConfig();
+    public KafkaProducer<String, String> kafkaProducerManager() {
+        Properties kafkaProducerConfig = kafkaProducerConfig();
         if(kafkaProducerConfig != null) {
-            Producer<String, String> kafkaProducer = new Producer<String, String>(kafkaProducerConfig);
+            KafkaProducer<String, String> kafkaProducer = new KafkaProducer<String, String>(kafkaProducerConfig);
             return kafkaProducer;
         }
         return null;
